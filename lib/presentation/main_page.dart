@@ -75,7 +75,7 @@ class _MainPageState extends State<MainPage> {
       // appBar: AppBarWidget(toggleLeftPanel: _toggleLeftPanel),
       body: SizedBox(
         // 감춘거1
-        //  height: currentScreenHeight(context),
+         height: currentScreenHeight(context),
         child: Stack(
           children: [
             buildBody(context),
@@ -200,18 +200,18 @@ class _MainPageState extends State<MainPage> {
             ? Row(
                 children: [
                   // 감춘거 2
-                  // Expanded(
-                  //   flex: 2,
-                  //   child: Visibility(
-                  //     visible: _isLeftPanelShown,
-                  //     child: Flexible(
-                  //       child: LayoutBuilder(
-                  //         builder: (_, constraints) =>
-                  //             LeftPanelWidget(constraints: constraints),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  Expanded(
+                    flex: 2,
+                    child: Visibility(
+                      visible: _isLeftPanelShown,
+                      child: Flexible(
+                        child: LayoutBuilder(
+                          builder: (_, constraints) =>
+                              LeftPanelWidget(constraints: constraints),
+                        ),
+                      ),
+                    ),
+                  ),
                   meaningless
                       ? Padding(
                           padding: const EdgeInsets.only(

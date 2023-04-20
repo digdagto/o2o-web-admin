@@ -3,33 +3,36 @@ import 'package:flutter/material.dart';
 class LeftPanelWidget extends StatelessWidget {
   final BoxConstraints constraints;
 
-  LeftPanelWidget({required this.constraints});
+  const LeftPanelWidget({super.key, required this.constraints});
 
   @override
   Widget build(BuildContext context) {
     var child = ListView.separated(
       separatorBuilder: (BuildContext context, int index) =>
-          SizedBox(height: 1),
+          const SizedBox(height: 1),
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
           title: index == 0
               ? Row(
-            children: [
-              SizedBox(
-                height: 14,
-                child: Image.asset('icon/point.png'),
-              ),
-              SizedBox(width: 8),
-              const Text(
-                '포인트 설정',
-                style: TextStyle(fontSize: 12, color: Color(0xffe68012)),
-              ),
-            ],
-          )
+                  children: [
+                    SizedBox(
+                      height: 14,
+                      child: Image.asset(
+                        'icon/point.png',
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '포인트 설정',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ],
+                )
               : const Text(
-            '회원 관리',
-            style: TextStyle(fontSize: 12),
-          ),
+                  '회원 관리',
+                  style: TextStyle(fontSize: 12, color: Color(0xffe68012)),
+                ),
           onTap: () {},
         );
       },
@@ -42,12 +45,12 @@ class LeftPanelWidget extends StatelessWidget {
 
     return Container(
       width: width,
-      child: child,
       decoration: const BoxDecoration(
         border: Border(
           right: BorderSide(width: 1.0, color: Color(0xffdcdfe6)),
         ),
       ),
+      child: child,
     );
   }
 }

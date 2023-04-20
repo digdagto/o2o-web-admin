@@ -1,9 +1,7 @@
 import 'dart:html';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:o2o_point_configuration/domain/services/auth_service.dart';
 import 'package:o2o_point_configuration/presentation/bindings/member_controll_binding.dart';
-import 'package:o2o_point_configuration/presentation/member_management_page.dart';
 import 'package:o2o_point_configuration/theme/o2otheme.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +9,7 @@ import 'package:get/get.dart';
 
 import 'presentation/main_page.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -32,7 +29,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
       theme: O2OTheme.lightTheme(context),
       darkTheme: O2OTheme.darkTheme(context),
@@ -41,4 +37,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

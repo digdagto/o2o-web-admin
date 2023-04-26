@@ -34,7 +34,6 @@ class PointConfigurationRepositoryImpl implements PointConfigurationRepository {
 
   @override
   Stream<PointConfigurationModel?> getPointConfigurationStream(String documentId) {
-    print("30-getPointConfigurationStream");
     return _pointConfigurationsCollection
         .doc(documentId)
         .snapshots()

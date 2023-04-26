@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:get/get.dart';
 import 'package:o2o_point_configuration/data/models/point_configuration_model.dart';
 import 'package:o2o_point_configuration/data/repositories/point_configuration_impl.dart';
 import 'package:o2o_point_configuration/domain/repositories/point_configuration_repository.dart';
-import 'package:o2o_point_configuration/presentation/widgets/custom_toast.dart';
 
 class ConfigurationController extends GetxController {
   final Map<String, dynamic> queryParameters;
@@ -21,26 +20,19 @@ class ConfigurationController extends GetxController {
   final RxBool isLoading = true.obs;
   final collectionPath;
 
-  ConfigurationController({required this.queryParameters}) :
-        collectionPath = "pos_v2/${int.parse(queryParameters['id'].substring(3)) - 1}/configuration";
-        // collectionPath = "pos_v2/399/configuration/";
-
-
-
-
-
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  ConfigurationController({required this.queryParameters})
+      : collectionPath =
+            "pos_v2/${int.parse(queryParameters['id'].substring(3)) - 1}/configuration";
+  // collectionPath = "pos_v2/399/configuration/";
 
   void listenToRealtimeUpdates() {
-    PointConfigurationRepository pointConfigRepo = PointConfigurationRepositoryImpl(collectionPath);
+    PointConfigurationRepository pointConfigRepo =
+        PointConfigurationRepositoryImpl(collectionPath);
 
     try {
-      pointConfigRepo.getPointConfigurationStream('point').listen((
-          pointConfiguration) {
+      pointConfigRepo
+          .getPointConfigurationStream('point')
+          .listen((pointConfiguration) {
         if (pointConfiguration != null) {
           valuesLoaded.value = true;
           duration.value = pointConfiguration.expiration_year;
@@ -53,7 +45,7 @@ class ConfigurationController extends GetxController {
           isLoading.value = false;
         }
       });
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
@@ -87,14 +79,17 @@ class ConfigurationController extends GetxController {
   }
 
   Future<PointConfigurationModel?> getInitialValues() async {
-    PointConfigurationRepository pointConfigRepo = PointConfigurationRepositoryImpl(collectionPath);
+    PointConfigurationRepository pointConfigRepo =
+        PointConfigurationRepositoryImpl(collectionPath);
     return await pointConfigRepo.getPointConfiguration('point');
   }
 
   Future<void> loadInitialValues() async {
-    PointConfigurationRepository pointConfigRepo = PointConfigurationRepositoryImpl(collectionPath);
+    PointConfigurationRepository pointConfigRepo =
+        PointConfigurationRepositoryImpl(collectionPath);
     String documentId = 'point'; //your_document_id -> point
-    PointConfigurationModel? pointConfiguration = await pointConfigRepo.getPointConfiguration(documentId);
+    PointConfigurationModel? pointConfiguration =
+        await pointConfigRepo.getPointConfiguration(documentId);
 
     if (pointConfiguration != null) {
       duration.value = pointConfiguration.expiration_year;
@@ -109,8 +104,6 @@ class ConfigurationController extends GetxController {
     }
   }
 
-
-
   Future<void> submitData(BuildContext context) async {
     isLoading.value = true;
     PointConfigurationModel pointConfiguration = PointConfigurationModel(
@@ -124,10 +117,10 @@ class ConfigurationController extends GetxController {
       minUse: minUse.value,
     );
 
-    PointConfigurationRepository pointConfigRepo = PointConfigurationRepositoryImpl(collectionPath);
+    PointConfigurationRepository pointConfigRepo =
+        PointConfigurationRepositoryImpl(collectionPath);
     await pointConfigRepo.addOrUpdatePointConfiguration(pointConfiguration);
     isLoading.value = false;
-    showCustomToast(context, "저장이 완료되었습니다");
-
+    //showCustomToast(context, "저장이 완료되었습니다");
   }
 }

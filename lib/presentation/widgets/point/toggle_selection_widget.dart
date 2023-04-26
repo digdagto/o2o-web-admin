@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'package:o2o_point_configuration/presentation/controllers/configuration_controller.dart';
-import 'package:o2o_point_configuration/presentation/widgets/point/custom_switch.dart';
+import 'package:o2o_point_configuration/presentation/widgets/custom_switch.dart';
 import 'package:o2o_point_configuration/theme/app_colors.dart';
 
 class ToggleSelectionWidget extends StatelessWidget {

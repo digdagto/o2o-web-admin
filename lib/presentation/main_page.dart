@@ -5,15 +5,11 @@ import 'package:o2o_point_configuration/presentation/controllers/configuration_c
 import 'package:o2o_point_configuration/presentation/controllers/token_controller.dart';
 import 'package:o2o_point_configuration/presentation/widgets/fab.dart';
 import 'package:o2o_point_configuration/presentation/widgets/layout/left_panel_widget.dart';
-import 'package:o2o_point_configuration/presentation/widgets/member/dialog_widget.dart';
-import 'package:o2o_point_configuration/presentation/widgets/member/member_list_widget.dart';
-import 'package:o2o_point_configuration/presentation/widgets/member/member_title_list_widget.dart';
-import 'package:o2o_point_configuration/presentation/widgets/member/title_and_search_widget.dart';
+import 'package:o2o_point_configuration/presentation/widgets/point/app_bar_widget.dart';
 import 'package:o2o_point_configuration/presentation/widgets/point/select_duration_widget.dart';
 import 'package:o2o_point_configuration/presentation/widgets/point/text_inputs_widget.dart';
 import 'package:o2o_point_configuration/presentation/widgets/point/toggle_selection_widget.dart';
 import 'package:o2o_point_configuration/theme/app_colors.dart';
-import 'package:o2o_point_configuration/theme/o2otheme.dart';
 import 'package:o2o_point_configuration/utils/utils.dart';
 
 class MainPage extends StatefulWidget {
@@ -26,11 +22,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  /// admin 에 들어가는 동안에는 기본값 hide
-  bool _isLeftPanelShown = true;
-  bool isMemberClick = true;
-
-  bool meaningless = false; // 나중에 삭제
+  /**
+   * admin 에 들어가는 동안에는 기본값 hide
+   */
+  bool _isLeftPanelShown = false;
 
   final ConfigurationController configurationPageController =
       Get.find<ConfigurationController>();
@@ -49,7 +44,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _initializeFromUrl();
     });
   }
@@ -72,17 +67,14 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBarWidget(toggleLeftPanel: _toggleLeftPanel),
+      appBar: AppBarWidget(toggleLeftPanel: _toggleLeftPanel),
       body: SizedBox(
-        // 감춘거1
-         height: currentScreenHeight(context),
-        child: Stack(
-          children: [
-            buildBody(context),
-            isMemberClick ? _addMemberButton() : _buildFloatingActionButton(),
-            // _buildLoadingOverlay(),
-          ],
-        ),
+        height: currentScreenHeight(context),
+        child: Stack(children: [
+          buildBody(context),
+          _buildFloatingActionButton(),
+          _buildLoadingOverlay(),
+        ]),
       ),
     );
   }
@@ -96,14 +88,14 @@ class _MainPageState extends State<MainPage> {
         return Container(
           color: Colors.black.withOpacity(0.5),
           // Adjust the background color and opacity
-          child: const Center(
+          child: Center(
             child: CircularProgressIndicator(
               color: AppColors.primaryOrange,
             ), // Use your preferred loading indicator
           ),
         );
       } else {
-        return const SizedBox
+        return SizedBox
             .shrink(); // Return an empty widget when isLoading is false
       }
     });
@@ -114,6 +106,7 @@ class _MainPageState extends State<MainPage> {
     return Positioned(
       bottom: isMobile ? 8 : 42,
       right: isMobile ? 8 : 42,
+
       child: Container(
         child: CustomFAB(
           onPressed: () {
@@ -122,7 +115,7 @@ class _MainPageState extends State<MainPage> {
               configurationPageController.submitData(context);
             }
           },
-          child: const Text(
+          child: Text(
             "저장",
             style: TextStyle(color: Colors.white),
           ),
@@ -131,57 +124,15 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _addMemberButton() {
-    bool isMobile = isMobileDevice(context);
-
-    return Positioned(
-        bottom: isMobile ? 8 : 42,
-        right: isMobile ? 8 : 42,
-        child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const DialogWidget();
-              },
-            );
-          },
-          child: Container(
-            width: 112,
-            height: 42,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(3),
-              color: AppColors.primaryOrange,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-                Text(
-                  '회원 등록',
-                  style: O2OTheme.darkTheme(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(height: 1.1),
-                )
-              ],
-            ),
-          ),
-        ));
-  }
-
   Widget buildBody(BuildContext context) {
     bool isMobile = isMobileDevice(context);
 
     return isMobile
         ? Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
+      crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -193,139 +144,40 @@ class _MainPageState extends State<MainPage> {
                     ],
                   ),
                 ),
+            ),
+          ],
+        )
+        : Row(
+            children: [
+              Visibility(
+                visible: _isLeftPanelShown,
+                child: Flexible(
+                  child: LayoutBuilder(
+                    builder: (_, constraints) =>
+                        LeftPanelWidget(constraints: constraints),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ToggleSelectionWidget(),
+                        SelectDurationWidget(),
+                        TextInputsWidget(
+                          formKey: _key,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
-          )
-        : isMemberClick
-            ? Row(
-                children: [
-                  // 감춘거 2
-                  Expanded(
-                    flex: 2,
-                    child: Visibility(
-                      visible: _isLeftPanelShown,
-                      child: Flexible(
-                        child: LayoutBuilder(
-                          builder: (_, constraints) =>
-                              LeftPanelWidget(constraints: constraints),
-                        ),
-                      ),
-                    ),
-                  ),
-                  meaningless
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                              left: 40, right: 40, top: 23, bottom: 38),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const TitleAndSearchWidget(),
-                              const SizedBox(
-                                height: 39,
-                              ),
-                              Container(
-                                width: 1640,
-                                height: 800,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: AppColors.textfieldBorderColor,
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    const MemberTitleListWidget(),
-                                    Container(
-                                      color: AppColors.defaultGrey2Color,
-                                      height: 1,
-                                    ),
-                                    Expanded(
-                                      child: ListView(
-                                        children: List.generate(
-                                          20,
-                                          (index) => const MemberListWidget(),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.only(
-                              left: 40, right: 40, top: 23, bottom: 38),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const TitleAndSearchWidget(),
-                              const SizedBox(
-                                height: 39,
-                              ),
-                              Container(
-                                width: 1640,
-                                height: 800,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: AppColors.textfieldBorderColor,
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    const MemberTitleListWidget(),
-                                    Container(
-                                      color: AppColors.defaultGrey2Color,
-                                      height: 1,
-                                    ),
-                                    Expanded(
-                                      child: ListView(
-                                        children: List.generate(
-                                          20,
-                                          (index) => const MemberListWidget(),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                ],
-              )
-            : Row(
-                children: [
-                  Visibility(
-                    visible: _isLeftPanelShown,
-                    child: Flexible(
-                      child: LayoutBuilder(
-                        builder: (_, constraints) =>
-                            LeftPanelWidget(constraints: constraints),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ToggleSelectionWidget(),
-                            SelectDurationWidget(),
-                            TextInputsWidget(
-                              formKey: _key,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              );
+          );
   }
 
-  final int _selectedValue = 1;
+  int _selectedValue = 1;
 }

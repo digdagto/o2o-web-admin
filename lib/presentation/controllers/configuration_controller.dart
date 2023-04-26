@@ -18,7 +18,7 @@ class ConfigurationController extends GetxController {
   final RxBool usePoints = true.obs;
 
   final RxBool valuesLoaded = false.obs;
-  final RxBool isLoading = true.obs;
+  final RxBool isLoading = false.obs;
   final collectionPath;
 
   ConfigurationController({required this.queryParameters}) :

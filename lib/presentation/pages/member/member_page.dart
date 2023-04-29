@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:o2o_point_configuration/presentation/pages/member/widgets/member_list_row.dart';
+import 'package:o2o_point_configuration/presentation/pages/member/widgets/member_list_title.dart';
+import 'package:o2o_point_configuration/presentation/pages/member/widgets/upper_part_widget.dart';
+import 'package:o2o_point_configuration/presentation/pages/widgets/dialog_widget.dart';
 import 'package:o2o_point_configuration/presentation/theme/app_colors.dart';
 import 'package:o2o_point_configuration/presentation/theme/o2otheme.dart';
 
@@ -10,100 +14,102 @@ class MemberPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 23.0, left: 40, right: 40),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    '회원 관리',
-                    style: O2OTheme.lightTheme(context)
-                        .textTheme
-                        .displayMedium!
-                        .copyWith(
-                          color: AppColors.blackColor1,
-                        ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Text(
-                    '총 67 명',
-                    style: O2OTheme.lightTheme(context)
-                        .textTheme
-                        .displayMedium!
-                        .copyWith(fontSize: 20, color: AppColors.orangeColor1),
-                  ),
-                ],
+          const UpperPartWidget(),
+          const SizedBox(
+            height: 39,
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: AppColors.lightGreyColor3,
+                ),
               ),
-              Row(
+              child: Column(
                 children: [
-                  SizedBox(
-                    width: 265,
-                    height: 40,
-                    child: TextField(
-                      cursorColor: AppColors.orangeColor1,
-                      decoration: InputDecoration(
-                        hintText: '전화번호 뒤 4자리',
-                        hintStyle: O2OTheme.lightTheme(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(
-                              color: AppColors.darkGreyColor1,
-                            ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppColors.lightGreyColor3),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4),
-                          ),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppColors.lightGreyColor3),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4),
-                          ),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.orangeColor1),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4),
-                          ),
-                        ),
+                  Container(
+                    height: 56,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: AppColors.lightGreyColor3),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.lightGreyColor3),
-                        borderRadius: BorderRadius.circular(4)),
-                    width: 80,
-                    height: 42,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/icon/search.png',
-                          width: 16,
-                        ),
-                        Text('검색',
+                        Container(
+                          alignment: Alignment.center,
+                          width: (MediaQuery.of(context).size.width - 82) *
+                              (85 / 1640),
+                          child: Text(
+                            '구분',
                             style: O2OTheme.lightTheme(context)
                                 .textTheme
-                                .bodyLarge)
+                                .labelLarge,
+                          ),
+                        ),
+                        const MemberListTitle(title: '이름'),
+                        const MemberListTitle(title: '전화번호'),
+                        const MemberListTitle(title: '가입일'),
+                        const MemberListTitle(title: '방문 수'),
+                        const MemberListTitle(title: '보유 포인트'),
                       ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) =>
+                          MemberListRow(number: (index + 1).toString()),
+                      itemCount: 20,
                     ),
                   )
                 ],
-              )
-            ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, bottom: 38),
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const DialogWidget();
+                  },
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 112,
+                height: 42,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: AppColors.orangeColor1,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.add,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      '회원 등록',
+                      style: O2OTheme.lightTheme(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),

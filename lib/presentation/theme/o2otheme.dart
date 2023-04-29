@@ -11,6 +11,10 @@ class O2OTheme {
         displayMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
         bodyLarge: TextStyle(fontSize: 16.0),
         bodyMedium: TextStyle(fontSize: 14.0),
+        labelLarge: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            color: AppColors.blackColor1),
         labelMedium: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,

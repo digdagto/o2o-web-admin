@@ -1,7 +1,11 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:o2o_point_configuration/presentation/blocs/auth/auth_bloc.dart';
+import 'package:o2o_point_configuration/presentation/blocs/auth/auth_event.dart';
 import 'package:o2o_point_configuration/presentation/blocs/cubit/point_cubit.dart';
 import 'package:o2o_point_configuration/presentation/pages/point/widgets/point_radio_widget.dart';
 import 'package:o2o_point_configuration/presentation/pages/point/widgets/point_text_field_widget.dart';
@@ -30,6 +34,20 @@ class _PointPageState extends State<PointPage> {
       TextEditingController();
   final TextEditingController minUseEditingController = TextEditingController();
   final TextEditingController maxUseEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    Uri uri = Uri.parse(window.location.href);
+    Map<String, dynamic> queryParameters = Map.from(uri.queryParameters);
+    //test
+    queryParameters.putIfAbsent('id', () => 'S230000400');
+    queryParameters.putIfAbsent('pass', () => '12345678');
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      BlocProvider.of<AuthenticationBloc>(context).add(Login(id: queryParameters['id'], pass: queryParameters['pass']));
+    });
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {

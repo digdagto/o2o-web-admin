@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"sts":[{"expiry":1714032938.396364,"host":"e3SziuwfuO2UvuBno+qkR1ObHAzZmSUoJhrc7dbP1Uo=","mode":"force-https","sts_include_subdomains":true,"sts_observed":1682496938.396366},{"expiry":1714032936.297248,"host":"8/RrMmQlCD2Gsp14wUCE1P8r7B2C5+yE0+g79IPyRsc=","mode":"force-https","sts_include_subdomains":true,"sts_observed":1682496936.29725}],"version":2}
+=======
+{"sts":[{"expiry":1714037075.287346,"host":"e3SziuwfuO2UvuBno+qkR1ObHAzZmSUoJhrc7dbP1Uo=","mode":"force-https","sts_include_subdomains":true,"sts_observed":1682501075.287348},{"expiry":1714037070.836063,"host":"8/RrMmQlCD2Gsp14wUCE1P8r7B2C5+yE0+g79IPyRsc=","mode":"force-https","sts_include_subdomains":true,"sts_observed":1682501070.836068}],"version":2}
+>>>>>>> refs/remotes/origin/main

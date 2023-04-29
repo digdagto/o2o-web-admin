@@ -45,11 +45,25 @@
 //   }
 // }
 
+import 'dart:html';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:o2o_point_configuration/presentation/routers/routers.dart';
 import 'package:o2o_point_configuration/presentation/theme/o2otheme.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  Uri uri = Uri.parse(window.location.href);
+  Map<String, dynamic> queryParameters = Map.from(uri.queryParameters);
+  //test
+  queryParameters.putIfAbsent('id', () => 'S230000400');
+  queryParameters.putIfAbsent('pass', () => '12345678');
   runApp(const MyApp());
 }
 

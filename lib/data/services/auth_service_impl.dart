@@ -4,16 +4,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:o2o_point_configuration/data/models/token_model.dart';
 import 'package:o2o_point_configuration/domain/services/auth_service.dart';
+import 'package:o2o_point_configuration/presentation/blocs/firebaseLogin/firebase_login_bloc.dart';
+import 'package:o2o_point_configuration/presentation/blocs/firebaseLogin/firebase_login_event.dart';
 import 'package:o2o_point_configuration/presentation/controllers/configuration_controller.dart';
 import 'package:o2o_point_configuration/presentation/controllers/token_controller.dart';
 import 'package:o2o_point_configuration/utils/api.dart';
 
 class AuthServiceImpl implements AuthService {
   late TokenController _tokenController;
+  late FirebaseLoginBloc _firebaseLoginBloc; // Add this line
 
 //constructor
-  AuthServiceImpl(){
-   _tokenController = TokenController();
+  AuthServiceImpl({required FirebaseLoginBloc firebaseLoginBloc}) {
+    _tokenController = TokenController();
+    _firebaseLoginBloc = firebaseLoginBloc; // Add this line
   }
 
   @override
@@ -41,13 +45,11 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<void> firebaseLogin(token) async{
+  Future<void> firebaseLogin(token) async {
     print(FirebaseAuth.instance);
-    FirebaseAuth.instance.signInWithCustomToken(token!)
-        .then((fbResult){
-          final ConfigurationController configurationPageController =
-          Get.find<ConfigurationController>();
-      configurationPageController.listenToRealtimeUpdates();
+    FirebaseAuth.instance.signInWithCustomToken(token!).then((fbResult) {
+      // Emit the FirebaseLoginWithToken event
+      _firebaseLoginBloc.add(FirebaseLoginWithToken(token));
     });
   }
 

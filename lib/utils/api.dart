@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 
 class ApiClient {
 
-  // static const String baseUrl = "https://api.ordern.co.kr";
-  static const String baseUrl = "http://localhost:8080";
+  static const String baseUrl = "https://api.ordern.co.kr";
+  // static const String baseUrl = "http://localhost:8080";
   static const String loginApi = "/api/app/mng/pos/login";
 
   static final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
